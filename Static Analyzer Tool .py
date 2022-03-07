@@ -10,7 +10,7 @@
 
 
 stackCode = []
-with open('PythonCode.py', 'r') as codeFile:
+with open('q3.py', 'r') as codeFile:
     for line in codeFile:
         line = line.strip()
         if line and "#" not in line:
@@ -83,9 +83,14 @@ def StaticAnalyzerFun(function):
     
     if(divisionIsFound(function)==True):
         TestDivideByZero(function)
+        
+    if(PointerIsFound(function)==True):
+        objectName,indexOfLine = GetObjectNameAndindex(function)
+        TestNullPointer(function,objectName,indexOfLine)
+        
 
 
-# ### this dunction will check if the function which is passes to static analyzer
+# ### this function will check if the function which is passes to static analyzer
 # ### have a division or not to applay TestDivideByZero function on it .
 # ***
 # 
@@ -123,20 +128,72 @@ def TestDivideByZero(function):
         denominator = ArithmeticSentence[divisionSymbolIndex+1:len(ArithmeticSentence)-1]
         for i in range(0,function.index(ArithmeticSentence)):
             if "if("+denominator+" == 0)" not in function[i]:
-                 reportFile.write("devide by zero error -> " + denominator +" = 0 ")
+                 reportFile.write("devide by zero error -> " + denominator +" = 0\n")
+
+
+# ### this function will check if the function which is passes to static analyzer
+# ### have a dot  symbol on other word check if the function have a ponter call its proirties 
+# ### or not to applay TestNullPointer function on it .
+# ***
+# 
+
+# In[11]:
+
+
+def PointerIsFound(function):
+    for line in function:
+        if "." in line:
+            return True
+    return False
+
+
+# ###  Get pointer Name and its index :
+
+# In[12]:
+
+
+def GetObjectNameAndindex(function):
+    objectName = ""
+    for line in function: 
+        if "." in line :
+            indexOfDot= line.index(".");
+            indexOfLine = function.index(line);
+            for i in range(indexOfDot-1, -1, -1):
+                if(line[i] == " "):
+                    break;
+                else:
+                    objectName+=line[i]
+                    
+    return(objectName[::-1],indexOfLine)
+                    
+
+
+# ### TestNullPointer function will through on the passed function from index = 0 to the index of pointer 
+# ### to check if we have an if statment that chek if the pointer ! = Null .
+
+# In[13]:
+
+
+def TestNullPointer(function,objectName,indexOfLine):
+    for i in range(0,indexOfLine):
+        if "if("+objectName+" != None)" not in function[i]:
+                 reportFile.write("Null pointer exception ->" + objectName +" object = None \n" )
 
 
 # ### Pass over each function which is stored inside the functionsList , and pass to the  StaticAnalyzerFun to test it
 # ***
 
-# In[11]:
+# In[14]:
 
 
+functionNumber = 1
 for function in functionsList:
+    reportFile.write("Bugs at function"+ str(functionNumber) +": \n" )
     StaticAnalyzerFun(function)
+    functionNumber+=1
 
 
-# In[12]:
+# In[15]:
 
 
 reportFile.close()
