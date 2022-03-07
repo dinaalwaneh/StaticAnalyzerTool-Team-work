@@ -27,7 +27,7 @@ stackCode
 # ### Get the start index for each function in the code
 # ****************************************
 
-# In[5]:
+# In[3]:
 
 
 startIndexOfFunction = []
@@ -36,7 +36,7 @@ for line in stackCode:
         startIndexOfFunction.append(stackCode.index(line))       
 
 
-# In[6]:
+# In[4]:
 
 
 startIndexOfFunction
@@ -47,7 +47,7 @@ startIndexOfFunction
 # ***********************
 # 
 
-# In[7]:
+# In[5]:
 
 
 functionsList=[]
@@ -58,7 +58,7 @@ for i in range(0,len(startIndexOfFunction)):
     functionsList.append(stackCode[startIndexOfFunction[i]:startIndexOfFunction[i+1]])
 
 
-# In[10]:
+# In[6]:
 
 
 functionsList
@@ -68,7 +68,15 @@ functionsList
 # ### Our Static Analyzer Tool :)
 # *****************
 
-# In[12]:
+# #### Create reporte file to save the bygs :
+
+# In[7]:
+
+
+reportFile= open("Report.txt","w+")
+
+
+# In[8]:
 
 
 def StaticAnalyzerFun(function):
@@ -82,7 +90,7 @@ def StaticAnalyzerFun(function):
 # ***
 # 
 
-# In[13]:
+# In[9]:
 
 
 def divisionIsFound(function):
@@ -99,7 +107,7 @@ def divisionIsFound(function):
 # ### finally it will write the bug on  report file if it is found .
 # 
 
-# In[20]:
+# In[10]:
 
 
 def TestDivideByZero(function):
@@ -115,15 +123,21 @@ def TestDivideByZero(function):
         denominator = ArithmeticSentence[divisionSymbolIndex+1:len(ArithmeticSentence)-1]
         for i in range(0,function.index(ArithmeticSentence)):
             if "if("+denominator+" == 0)" not in function[i]:
-                print("devide by zero error -> " + denominator +" = 0 ")
+                 reportFile.write("devide by zero error -> " + denominator +" = 0 ")
 
 
 # ### Pass over each function which is stored inside the functionsList , and pass to the  StaticAnalyzerFun to test it
 # ***
 
-# In[21]:
+# In[11]:
 
 
 for function in functionsList:
     StaticAnalyzerFun(function)
+
+
+# In[12]:
+
+
+reportFile.close()
 
