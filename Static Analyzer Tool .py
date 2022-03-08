@@ -1,20 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# ### Here I read the Python code and then stored it in the "codeFile" variable,
-# ### after that we will go through each line of the codeFile so that this line is not empty or contains a comment,
-# ### and then add it to the "stackCode" . 
+# ### Here I read the Python code as "codeFile" ,
+# ### after that we will go through each line of the codeFile
+# ### and then add it to the "stackCode" list . 
 # ****************************************
 
 # In[1]:
 
 
 stackCode = []
-with open('q3.py', 'r') as codeFile:
-    for line in codeFile:
-        line = line.strip()
-        if line and "#" not in line:
-            stackCode.append(line)
+with open('PythonCode.py', 'r') as codeFile:
+    for line in codeFile:      
+        stackCode.append(line)
 
 
 # In[2]:
@@ -24,34 +22,23 @@ with open('q3.py', 'r') as codeFile:
 stackCode
 
 
-
 # ### Get the start index for each function in the code
-# ### & Get the start function in the code
-
 # ****************************************
 
 # In[3]:
 
 
 startIndexOfFunction = []
-startFun = []
 for line in stackCode:
     if ("def" in line):
-        startIndexOfFunction.append(stackCode.index(line))   
-        startFun.append(line)          
+        startIndexOfFunction.append(stackCode.index(line))       
 
 
 # In[4]:
 
 
 startIndexOfFunction
-#Result = > [1, 4, 11] >> thats mean that we have function start at index 1 , function start at index 4 and function start at index 11 . 
-
-
-
-# In[4]:
-startFun
-#Result = > The first line in each function ,,,ex: "def Calculate(self, number,  divisor):"
+#If Result = > [1, 4, 11] >> thats mean that we have function start at index 1 , function start at index 4 and function start at index 11 . 
 
 
 # ####  Here I have stored all the functions inside functionsList "PS : the start of some function is the end of another":
@@ -79,34 +66,18 @@ functionsList
 # ### Our Static Analyzer Tool :)
 # *****************
 
-# #### Create reporte file to save the bygs :
+# ## Check list functions implementation :
+# ...................................................................................................................
 
-# In[7]:
-
-
-reportFile= open("Report.txt","w+")
-
-
-# In[8]:
-
-
-def StaticAnalyzerFun(function):
-    
-    if(divisionIsFound(function)==True):
-        TestDivideByZero(function)
-        
-    if(PointerIsFound(function)==True):
-        objectName,indexOfLine = GetObjectNameAndindex(function)
-        TestNullPointer(function,objectName,indexOfLine)
-        
-
-
-# ### this function will check if the function which is passes to static analyzer
-# ### have a division or not to applay TestDivideByZero function on it .
+# # 1. Divide by zero :
+# ***
+# 
+# #### this function will check if the function which is passes to static analyzer
+# #### have a division or not to applay TestDivideByZero function on it .
 # ***
 # 
 
-# In[9]:
+# In[7]:
 
 
 def divisionIsFound(function):
@@ -116,39 +87,46 @@ def divisionIsFound(function):
     return False
 
 
-# ###  TestDivideByZero will receive the function
-# ### and It passes each line by it and stores the arithmetic sentences inside ArithmeticSentences list , 
-# ### then it will  passes each Arithmetic Sentence ArithmeticSentences list to get the denominator 
-# ### and check if the value of the denominator is not equal to zero before the arithmetic operation applied
-# ### finally it will write the bug on  report file if it is found .
+# ####  TestDivideByZero function will receive the function
+# #### and It passes each line by it and stores the arithmetic sentences inside ArithmeticSentences list ,
+# #### in addetion it will store the location of the arithmetic sentence relative to the code to be checked in the lineIndex list
+# #### then it will  passes each Arithmetic Sentence ArithmeticSentences list to get the denominator 
+# #### and check if the value of the denominator is not equal to zero before the arithmetic operation applied
+# #### finally it will write the bug on  report file if it is found and its line .
 # 
 
-# In[10]:
+# In[8]:
 
 
 def TestDivideByZero(function):
-    
-    ArithmeticSentences = [] 
+    ArithmeticSentences = []
+    lineIndex=[]
     for line in function:
         if "/" in line:
             ArithmeticSentences.append(line)
-    
+            lineIndex.append(stackCode.index(line))
  
+    flag=1
     for ArithmeticSentence in ArithmeticSentences:
-        divisionSymbolIndex =  ArithmeticSentence.index("/")
-        denominator = ArithmeticSentence[divisionSymbolIndex+1:len(ArithmeticSentence)-1]
-        for i in range(0,function.index(ArithmeticSentence)):
-            if "if("+denominator+" == 0)" not in function[i]:
-                 reportFile.write("devide by zero error -> " + denominator +" = 0\n")
+            divisionSymbolIndex =  ArithmeticSentence.index("/")
+            denominator = ArithmeticSentence[divisionSymbolIndex+1:len(ArithmeticSentence)-1]
+            for i in range(0,function.index(ArithmeticSentence)):
+                if "if("+denominator+" == 0)" not in function[i]:
+                    flag=0
+            if(flag==0):
+                reportFile.write("devide by zero error ->" + denominator +"= 0 at line "+str(lineIndex[ArithmeticSentences.index(ArithmeticSentence)]+1) +"\n")
 
 
-# ### this function will check if the function which is passes to static analyzer
-# ### have a dot  symbol on other word check if the function have a ponter call its proirties 
-# ### or not to applay TestNullPointer function on it .
+# # 2. Null pointer exception :
+# ***
+# 
+# #### PointerIsFound function will check if the function which is passes to static analyzer
+# #### have a dot  symbol on other word check if the function have a ponter call its proirties 
+# #### or not to applay TestNullPointer function on it .
 # ***
 # 
 
-# In[11]:
+# In[9]:
 
 
 def PointerIsFound(function):
@@ -158,9 +136,9 @@ def PointerIsFound(function):
     return False
 
 
-# ###  Get pointer Name and its index :
+# ###  Get variable Name ,  its index relative to the function itself + its index relative to the code to be checked :
 
-# In[12]:
+# In[10]:
 
 
 def GetObjectNameAndindex(function):
@@ -168,30 +146,60 @@ def GetObjectNameAndindex(function):
     for line in function: 
         if "." in line :
             indexOfDot= line.index(".");
-            indexOfLine = function.index(line);
+            indexOfLineAtFunc = function.index(line)
+            indexOfLineAtCode = stackCode.index(line)
             for i in range(indexOfDot-1, -1, -1):
                 if(line[i] == " "):
                     break;
                 else:
                     objectName+=line[i]
                     
-    return(objectName[::-1],indexOfLine)
-                    
+    return(objectName[::-1],indexOfLineAtFunc,indexOfLineAtCode)
 
 
-# ### TestNullPointer function will through on the passed function from index = 0 to the index of pointer 
-# ### to check if we have an if statment that chek if the pointer ! = Null .
+# #### TestNullPointer function will through on the passed function from index = 0 to the index of code which may caouse null pointer error . 
+# #### to check if we have an if statment that chek if the variable ! = Null .
+
+# In[11]:
+
+
+def TestNullPointer(function,objectName,indexOfLine, indexOfLineAtCode):
+    
+    flag=1
+    for i in range(0,indexOfLine):
+        if "if("+objectName+" != None)" not in function[i]:
+            flag=0
+    if(flag==0):        
+        reportFile.write("Null pointer exception ->" + objectName +" object = NULL at line "+ str(indexOfLineAtCode+1) +"\n" )
+                
+
+
+# ## implementation of our static analyzer  tool :
+
+# #### Create reporte file to save the bygs :
+
+# In[12]:
+
+
+reportFile= open("Report.txt","w+")
+
+
+# ### this StaticAnalyzerTool function will receive one function and check each line on it to see if it has any sentence that may cause any bug from the check list and if true it will call the tester functuin for this bug to print the details on text file .
 
 # In[13]:
 
 
-def TestNullPointer(function,objectName,indexOfLine):
-    for i in range(0,indexOfLine):
-        if "if("+objectName+" != None)" not in function[i]:
-                 reportFile.write("Null pointer exception ->" + objectName +" object = None \n" )
+def StaticAnalyzerTool(function):
+    
+    if(divisionIsFound(function)==True):
+        TestDivideByZero(function)
+        
+    if(PointerIsFound(function)==True):
+        objectName,indexOfLine,indexOfLineAtCode = GetObjectNameAndindex(function)
+        TestNullPointer(function,objectName,indexOfLine, indexOfLineAtCode)
 
 
-# ### Pass over each function which is stored inside the functionsList , and pass to the  StaticAnalyzerFun to test it
+# #### through on each function which is stored inside the functionaList , pass it to the Static Analyzer Fun to test it
 # ***
 
 # In[14]:
@@ -200,28 +208,11 @@ def TestNullPointer(function,objectName,indexOfLine):
 functionNumber = 1
 for function in functionsList:
     reportFile.write("Bugs at function"+ str(functionNumber) +": \n" )
-    StaticAnalyzerFun(function)
+    StaticAnalyzerTool(function)
     functionNumber+=1
 
 
-# In[15]:  
-
-# ###Function to make sure there are no more than three parameters for the functions
-
-def NumOfParam(function):
-    for line in startFun:
-        if "," in line:
-            count=line.count(",")
-            if count>=3:
-                return "not allowed"
-            
-            
-# In[16]:
-NumOfParam(startFun)    
-    
-    
-    
-# In[17]:
+# In[15]:
 
 
 reportFile.close()
