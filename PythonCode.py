@@ -29,8 +29,8 @@ class program:
     
     
     def unReachable(num:int):
-        if num > 40:
-            if num > 30:
+        if num > 4:
+            if num > 3:
                 return 1
             
             
