@@ -38,6 +38,13 @@ class program:
             
     def  Print(self,student):
         print("Student", student.name)
+      
+ 
+    def magicNum():
+        if(state==1):
+            return 1
+      
+        
         
 
 
