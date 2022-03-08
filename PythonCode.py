@@ -21,6 +21,7 @@ class program:
             
     def checkStatus():
         GetStatusValue(2,5)
+        GetStatusValue("faild")
         
     
     def parameters(param1:int,param2:str,param3:float,param4:int):
