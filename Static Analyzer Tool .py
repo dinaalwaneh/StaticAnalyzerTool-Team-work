@@ -114,7 +114,7 @@ def TestDivideByZero(function):
                 if "if("+denominator+" == 0)" not in function[i]:
                     flag=0
             if(flag==0):
-                reportFile.write("devide by zero error ->" + denominator +"= 0 at line "+str(lineIndex[ArithmeticSentences.index(ArithmeticSentence)]+1) +"\n")
+                reportFile.write("* devide by zero error ->" + denominator +"= 0 at line -> "+str(lineIndex[ArithmeticSentences.index(ArithmeticSentence)]+1) +"\n")
 
 
 # # 2. Null pointer exception :
@@ -163,22 +163,198 @@ def GetObjectNameAndindex(function):
 # In[11]:
 
 
-def TestNullPointer(function,objectName,indexOfLine, indexOfLineAtCode):
-    
+def TestNullPointer(function):
+    VariableName,indexOfLine,indexOfLineAtCode = GetObjectNameAndindex(function)
     flag=1
     for i in range(0,indexOfLine):
-        if "if("+objectName+" != None)" not in function[i]:
+        if "if("+VariableName+" != None)" not in function[i]:
             flag=0
     if(flag==0):        
-        reportFile.write("Null pointer exception ->" + objectName +" object = NULL at line "+ str(indexOfLineAtCode+1) +"\n" )
+        reportFile.write("* Null pointer exception :" + VariableName +" may = NULL at line -> "+ str(indexOfLineAtCode+1) +"\n" )
                 
 
+
+# # 3. Hiding/ burying exceptions :
+# ***
+# 
+# #### GetStartIndexOfExcept function 
+# ***
+# 
+
+# In[12]:
+
+
+def GetStartIndexOfExcept():
+    startIndexOfExcept = []
+    for line in stackCode :
+        if ("except" in line):
+            startIndexOfExcept.append(stackCode.index(line))   
+    return startIndexOfExcept
+
+
+# In[13]:
+
+
+#print start Index Of each Except
+startIndexOfExcept = GetStartIndexOfExcept()
+startIndexOfExcept
+
+
+# #### GetExceptsList function will get all the blocks for exceps in the code :
+
+# In[14]:
+
+
+def GetExceptsList(startIndexOfExcept):
+    exceptsList=[]
+    for i in range(0,len(startIndexOfExcept)):
+        if(i==(len(startIndexOfExcept)-1)):
+            exceptsList.append(stackCode[startIndexOfExcept[i]:len(stackCode)])
+            break;
+        exceptsList.append(stackCode[startIndexOfExcept[i]:startIndexOfExcept[i+1]])
+    return exceptsList
+
+
+# In[15]:
+
+
+exceptsList = GetExceptsList(startIndexOfExcept)
+
+
+# #### TestHidingexception function will pass on eech except block at exceptsList an chick if it has an action or not :
+
+# In[16]:
+
+
+def TestHidingExcption():
+    for line in exceptsList:        
+        flag=0
+        for i in range(1,len(line)):
+            if((len(line[i]) - len(line[i].lstrip()))<=(len(line[0]) - len(line[0].lstrip()))):
+                break;
+
+            elif(not(line[i].strip()) or "#" in line[i] ) :
+                flag=0
+            else:
+                flag=1
+                break
+            if(flag==0):
+                reportFile.write("* Hiding/burying exceptions at line -> "+ str(startIndexOfExcept[exceptsList.index(line)]+1)+ "\n")
+
+
+# # 4. Magic number :
+# ***
+# 
+# #### Description
+# ***
+# 
+
+# # 5. Do the attributes (e.g., data type and size) :
+# ***
+# 
+# #### This function returns number and data type of function parameters 
+# ***
+# 
+
+# In[17]:
+
+
+def checkParamsProperties(function):
+    parameters=function[function.index("(")+1: function.index(")")]
+    parameters=parameters.split(",") 
+    dataTypeOFParams=[]
+    numberOfParams=len(parameters)
+ 
+    for param in parameters: 
+        dataTypeOFParams.append(param[param.index(':')+1:])
+        
+    return (dataTypeOFParams,numberOfParams)
+
+
+# #### This function returns number and data type of function call arguments
+
+# In[18]:
+
+
+def checkArgumentProperties(function):
+    parameters=function[function.index("(")+1: function.index(")")]
+    parameters=parameters.split(",")
+    numberOfParams=len(parameters)
+    dataTypeOFParams=[]
+    
+    for param in parameters:
+        if "'" in param:
+            dataTypeOFParams.append("chr")   
+        elif param.isdigit():
+            dataTypeOFParams.append("int") 
+        else:
+            dataTypeOFParams.append("str")
+    return (dataTypeOFParams,numberOfParams)
+
+
+# ### this function check if there is function call and return list of function call
+
+# In[19]:
+
+
+def CheckIfThereFunctionCall(function):
+    functionsCall=[]
+    for functionCall in function:
+        if functionCall==function[0]:
+            continue
+        if "(" and ")" in functionCall and "print" not in functionCall:
+            functionsCall.append(functionCall)
+            
+    return functionsCall
+
+
+# ## this function if  the arguments and parameters matched and write on report file
+
+# In[20]:
+
+
+def CheckIfSameParametersAndArrguments(function):
+    
+        functionsCall=CheckIfThereFunctionCall(function)
+        for functionCall in functionsCall:
+            functionCallName=functionCall[:functionCall.index("(")]
+            functionCallName=functionCallName.replace(' ','')
+            for i in functionsList:
+                functionName=i[0][8 :i[0].index("(")]
+                if functionCallName == functionName:
+                    numOfFuncPar=checkParamsProperties(i[0])[1]
+                    numOfCallFuncPar=checkArgumentProperties(functionCall)[1]
+                    
+                    typeOfFuncPar=checkParamsProperties(i[0])[0]
+                    typeOfCallFuncPar=checkArgumentProperties(functionCall)[0]
+                    
+                    if numOfFuncPar!=numOfCallFuncPar:
+                        reportFile.write("* Number of attributes of function call "+functionCall.replace(" ",'')+" at line -> "+str(stackCode.index(functionCall))+" did not match the number of parameters of the function \n")
+                    
+                    if typeOfFuncPar !=  typeOfCallFuncPar:
+                        reportFile.write("* data type of attributes of function call "+functionCall.replace(" ",'')+" at line -> "+str(stackCode.index(functionCall))+" did not match the data type of parameters of the function \n")
+                        
+
+
+# # 6. no more than three parameters for the methods :
+# ***
+# 
+# #### Description
+# ***
+# 
+
+# # 7. Unreachable code :
+# ***
+# 
+# #### Description
+# ***
+# 
 
 # ## implementation of our static analyzer  tool :
 
 # #### Create reporte file to save the bygs :
 
-# In[12]:
+# In[21]:
 
 
 reportFile= open("Report.txt","w+")
@@ -186,7 +362,7 @@ reportFile= open("Report.txt","w+")
 
 # ### this StaticAnalyzerTool function will receive one function and check each line on it to see if it has any sentence that may cause any bug from the check list and if true it will call the tester functuin for this bug to print the details on text file .
 
-# In[13]:
+# In[22]:
 
 
 def StaticAnalyzerTool(function):
@@ -194,25 +370,36 @@ def StaticAnalyzerTool(function):
     if(divisionIsFound(function)==True):
         TestDivideByZero(function)
         
-    if(PointerIsFound(function)==True):
-        objectName,indexOfLine,indexOfLineAtCode = GetObjectNameAndindex(function)
-        TestNullPointer(function,objectName,indexOfLine, indexOfLineAtCode)
+    if(PointerIsFound(function)==True):  
+        TestNullPointer(function)
+    
+    #Magic number:
+    
+    
+    if(CheckIfThereFunctionCall(function)):
+        CheckIfSameParametersAndArrguments(function)
+    
+    #parameters:
+    #Unreachable code:
+    
 
 
 # #### through on each function which is stored inside the functionaList , pass it to the Static Analyzer Fun to test it
 # ***
 
-# In[14]:
+# In[23]:
 
 
 functionNumber = 1
-for function in functionsList:
-    reportFile.write("Bugs at function"+ str(functionNumber) +": \n" )
+for function in functionsList:   
     StaticAnalyzerTool(function)
     functionNumber+=1
+    
+#Hiding/burying exceptions
+TestHidingExcption()    
 
 
-# In[15]:
+# In[24]:
 
 
 reportFile.close()
