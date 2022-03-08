@@ -2,8 +2,6 @@
 # coding: utf-8
 
 
-
-
 class program:
  
     
@@ -43,13 +41,3 @@ class program:
     def magicNum():
         if(state==1):
             return 1
-      
-        
-        
-
-
-
-
-
-
-
