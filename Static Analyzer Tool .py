@@ -24,16 +24,21 @@ with open('q3.py', 'r') as codeFile:
 stackCode
 
 
+
 # ### Get the start index for each function in the code
+# ### & Get the start function in the code
+
 # ****************************************
 
 # In[3]:
 
 
 startIndexOfFunction = []
+startFun = []
 for line in stackCode:
     if ("def" in line):
-        startIndexOfFunction.append(stackCode.index(line))       
+        startIndexOfFunction.append(stackCode.index(line))   
+        startFun.append(line)          
 
 
 # In[4]:
@@ -41,6 +46,12 @@ for line in stackCode:
 
 startIndexOfFunction
 #Result = > [1, 4, 11] >> thats mean that we have function start at index 1 , function start at index 4 and function start at index 11 . 
+
+
+
+# In[4]:
+startFun
+#Result = > The first line in each function ,,,ex: "def Calculate(self, number,  divisor):"
 
 
 # ####  Here I have stored all the functions inside functionsList "PS : the start of some function is the end of another":
@@ -193,7 +204,24 @@ for function in functionsList:
     functionNumber+=1
 
 
-# In[15]:
+# In[15]:  
+
+# ###Function to make sure there are no more than three parameters for the functions
+
+def NumOfParam(function):
+    for line in startFun:
+        if "," in line:
+            count=line.count(",")
+            if count>=3:
+                return "not allowed"
+            
+            
+# In[16]:
+NumOfParam(startFun)    
+    
+    
+    
+# In[17]:
 
 
 reportFile.close()
