@@ -1,0 +1,9 @@
+* devide by zero error ->divisor;= 0 at line -> 8
+* Number of attributes of function call GetStatusValue(2,5)
+ at line -> 22 did not match the number of parameters of the function 
+* data type of attributes of function call GetStatusValue(2,5)
+ at line -> 22 did not match the data type of parameters of the function 
+* data type of attributes of function call GetStatusValue("faild")
+ at line -> 23 did not match the data type of parameters of the function 
+* Null pointer exception :student may = NULL at line -> 38
+* Hiding/burying exceptions at line -> 46

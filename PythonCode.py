@@ -24,17 +24,17 @@ class program:
         GetStatusValue("faild")
         
     
-    def parameters(param1:int,param2:str,param3:float,param4:int):
+    def parameters(param1:int,param2:str,param3:chr,param4:int):
         return 1
     
     
     def unReachable(num:int):
-        if num > 40:
-            if num > 30:
+        if num > 4:
+            if num > 3:
                 return 1
             
             
-    def Print(student:object):
+    def Print(student):
         print("Student", student.name)
         
     
