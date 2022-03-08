@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
 class program:
  
     
@@ -10,7 +9,7 @@ class program:
         return result
 
 
-    def statusValue(status):
+    def GetStatusValue(status):
         if(status == -1 ):
             print("faild")
         elif(status == 1):
@@ -36,8 +35,14 @@ class program:
             
     def  Print(self,student):
         print("Student", student.name)
-      
- 
-    def magicNum():
-        if(state==1):
-            return 1
+        
+    
+    def PrintName():
+        try:
+            print(x)
+        except NameError:
+            print("The 'try ' is finished")  
+        except One:
+              
+        finally:
+             print("The 'try ' is finished")
