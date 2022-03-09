@@ -109,12 +109,12 @@ def TestDivideByZero(function):
     flag=1
     for ArithmeticSentence in ArithmeticSentences:
             divisionSymbolIndex =  ArithmeticSentence.index("/")
-            denominator = ArithmeticSentence[divisionSymbolIndex+1:len(ArithmeticSentence)-1]
+            denominator = ArithmeticSentence[divisionSymbolIndex+1:len(ArithmeticSentence)-2]
             for i in range(0,function.index(ArithmeticSentence)):
                 if "if("+denominator+" == 0)" not in function[i]:
                     flag=0
             if(flag==0):
-                reportFile.write("* devide by zero error ->" + denominator +"= 0 at line -> "+str(lineIndex[ArithmeticSentences.index(ArithmeticSentence)]+1) +"\n")
+                reportFile.write("* devide by zero error -> " + denominator +" may = 0 at line -> "+str(lineIndex[ArithmeticSentences.index(ArithmeticSentence)]+1) +"\n")
 
 
 # # 2. Null pointer exception :
@@ -177,7 +177,7 @@ def TestNullPointer(function):
 # # 3. Hiding/ burying exceptions :
 # ***
 # 
-# #### GetStartIndexOfExcept function 
+# #### GetStartIndexOfExcept function  will get the start index for each except in python code and return startIndexOfExcept list .
 # ***
 # 
 
@@ -201,6 +201,8 @@ startIndexOfExcept
 
 
 # #### GetExceptsList function will get all the blocks for exceps in the code :
+# 
+# #### The start index of except two is the end index of except one and so on .
 
 # In[14]:
 
@@ -218,10 +220,11 @@ def GetExceptsList(startIndexOfExcept):
 # In[15]:
 
 
+#Call GetExceptsList and stor the result which represent array of list -> each child is one except with is body . 
 exceptsList = GetExceptsList(startIndexOfExcept)
 
 
-# #### TestHidingexception function will pass on eech except block at exceptsList an chick if it has an action or not :
+# #### TestHidingexception function will pass on eech except block at exceptsList and chick if it has an action or not :
 
 # In[16]:
 
@@ -259,7 +262,7 @@ def TestHidingExcption():
 # In[17]:
 
 
-def checkParamsProperties(function):
+def CheckParamsProperties(function):
     parameters=function[function.index("(")+1: function.index(")")]
     parameters=parameters.split(",") 
     dataTypeOFParams=[]
@@ -276,7 +279,7 @@ def checkParamsProperties(function):
 # In[18]:
 
 
-def checkArgumentProperties(function):
+def CheckArgumentProperties(function):
     parameters=function[function.index("(")+1: function.index(")")]
     parameters=parameters.split(",")
     numberOfParams=len(parameters)
@@ -322,62 +325,35 @@ def CheckIfSameParametersAndArrguments(function):
             for i in functionsList:
                 functionName=i[0][8 :i[0].index("(")]
                 if functionCallName == functionName:
-                    numOfFuncPar=checkParamsProperties(i[0])[1]
-                    numOfCallFuncPar=checkArgumentProperties(functionCall)[1]
+                    numOfFuncPar=CheckParamsProperties(i[0])[1]
+                    numOfCallFuncPar=CheckArgumentProperties(functionCall)[1]
                     
-                    typeOfFuncPar=checkParamsProperties(i[0])[0]
-                    typeOfCallFuncPar=checkArgumentProperties(functionCall)[0]
+                    typeOfFuncPar=CheckParamsProperties(i[0])[0]
+                    typeOfCallFuncPar=CheckArgumentProperties(functionCall)[0]
                     
                     if numOfFuncPar!=numOfCallFuncPar:
-                        reportFile.write("* Number of attributes of function call "+functionCall.replace(" ",'')+" at line -> "+str(stackCode.index(functionCall))+" did not match the number of parameters of the function \n")
+                        reportFile.write("* Number of attributes of function call "+functionCall.replace(" ",'')+"  at line -> "+str(stackCode.index(functionCall)+1)+" did not match the number of parameters of the function \n")
                     
                     if typeOfFuncPar !=  typeOfCallFuncPar:
-                        reportFile.write("* data type of attributes of function call "+functionCall.replace(" ",'')+" at line -> "+str(stackCode.index(functionCall))+" did not match the data type of parameters of the function \n")
+                        reportFile.write("* data type of attributes of function call "+functionCall.replace(" ",'')+"  at line -> "+str(stackCode.index(functionCall)+1)+" did not match the data type of parameters of the function \n")
                         
 
 
 # # 6. no more than three parameters for the methods :
 # ***
 # 
-# #### this function will check if the function which is passes to static analyzer
-# have a function or not to applay TestNumOfParam function on it 
+# #### TestNumOfParam function will receive the "function" and take the first line in function where the parameters is .
+# ####  then count the number of commas to check if the  parameters more than 4 or not .7
 # ***
-# 
 
 # In[21]:
 
 
-def funIsFound(function):    
-    for line in function:
-        if ("def" in line):
-            return True   
-    return False
-
-
-# TestNumOfParam function will receive the "function"
-# pass on line by line in the stackCode to check if i find word "def" --> it mean there is a function ,then store start function in each function and the index of it
-# pass on line by line in startFun (which i storing the start function) ,then cheack if the "," found to count the number of parameters in function , if the count is more than two--> it mean there is more than three parameter in the function --> and this is my goal :)
-# finally it will write the bug on report file if it is found and its line .
-
-# In[22]:
-
-
-def TestNumOfParam(function):
-    startFun = []
-    startIndexOfFunction = []
-    for line in stackCode:
-        if ("def" in line):
-            startFun.append(line)      
-            startIndexOfFunction.append(stackCode.index(line))  
-    flag=1
-    for line in startFun:
-        if "," in line:
-            count=line.count(",")
-            if count>=3:
-                flag=0
-                break;
-    if(flag==0):
-        reportFile.write("* more than three parameters -> " + str((count+1))  + " parameters in function at line -> "+str(startIndexOfFunction[startFun.index(line)]+1) +"\n")         
+def TestNumOfParam(function):   
+    functionDefine = function[0]
+    parameterCount = functionDefine.count(",")          
+    if(parameterCount >= 3):
+        reportFile.write("* more than three parameters -> " + str((parameterCount+1))  + " parameters in function at line -> "+str(stackCode.index(functionDefine)+1) +"\n")         
 
 
 # # 7. Unreachable code :
@@ -391,7 +367,7 @@ def TestNumOfParam(function):
 
 # #### Create reporte file to save the bygs :
 
-# In[23]:
+# In[22]:
 
 
 reportFile= open("Report.txt","w+")
@@ -399,14 +375,16 @@ reportFile= open("Report.txt","w+")
 
 # ### this StaticAnalyzerTool function will receive one function and check each line on it to see if it has any sentence that may cause any bug from the check list and if true it will call the tester functuin for this bug to print the details on text file .
 
-# In[24]:
+# In[23]:
 
 
 def StaticAnalyzerTool(function):
     
+    #Divide by zero:
     if(divisionIsFound(function)==True):
         TestDivideByZero(function)
-        
+    
+    #Null pointer exception:
     if(PointerIsFound(function)==True):  
         TestNullPointer(function)
     
@@ -416,6 +394,9 @@ def StaticAnalyzerTool(function):
     if(CheckIfThereFunctionCall(function)):
         CheckIfSameParametersAndArrguments(function)
     
+    #parameters:
+    TestNumOfParam(function)
+    
     #Unreachable code:
     
 
@@ -423,20 +404,17 @@ def StaticAnalyzerTool(function):
 # #### through on each function which is stored inside the functionaList , pass it to the Static Analyzer Fun to test it
 # ***
 
-# In[25]:
+# In[24]:
 
 
-functionNumber = 1
 for function in functionsList:   
     StaticAnalyzerTool(function)
-    functionNumber+=1
-if(funIsFound(function)==True):
-    TestNumOfParam(function)     
-#Hiding/burying exceptions
-TestHidingExcption()    
+         
+#Hiding/burying exceptions for all code not function :
+TestHidingExcption()     
 
 
-# In[26]:
+# In[25]:
 
 
 reportFile.close()
