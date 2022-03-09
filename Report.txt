@@ -6,4 +6,8 @@
 * data type of attributes of function call GetStatusValue("faild")
  at line -> 23 did not match the data type of parameters of the function 
 * Null pointer exception :student may = NULL at line -> 38
+<<<<<<< Updated upstream
+=======
+* more than three parameters -> 4 parameters in function at line -> 27
+>>>>>>> Stashed changes
 * Hiding/burying exceptions at line -> 46
