@@ -9,7 +9,7 @@ class program:
 
     def GetStatusValue(status:int):
         if status == -1 :
-            print("faild")
+            print("fail")
         elif status == 1:
             print("success")      
         elif status == 0:
@@ -19,7 +19,7 @@ class program:
             
     def checkStatus():
         GetStatusValue(2,5)
-        GetStatusValue("failed")
+        GetStatusValue("fail")
         
     
     def parameters(a:int,b:str,c:chr,d:int):
@@ -28,7 +28,7 @@ class program:
     
     def unReachable(status:int):
         if status  == 0:
-            return "failed";
+            return "fail"
                 
         elif status == 0:
             return 0   # This line is unreachable
