@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
 
 class program:
  
@@ -24,7 +22,7 @@ class program:
         GetStatusValue("failed")
         
     
-    def parameters(param1:int,param2:str,param3:chr,param4:int):
+    def parameters(a:int,b:str,c:chr,d:int):
         return 1
     
     
