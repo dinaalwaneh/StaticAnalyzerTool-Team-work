@@ -21,7 +21,7 @@ class program:
             
     def checkStatus():
         GetStatusValue(2,5)
-        GetStatusValue("faild")
+        GetStatusValue("failed")
         
     
     def parameters(param1:int,param2:str,param3:chr,param4:int):
@@ -30,7 +30,7 @@ class program:
     
     def unReachable(status:int):
         if status  == 0:
-            return "faild";
+            return "failed";
                 
         elif status == 0:
             return 0   # This line is unreachable

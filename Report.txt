@@ -1,10 +1,21 @@
-* devide by zero error -> divisor may = 0 at line -> 8
+* divide by zero error -> divisor may = 0 at line -> 8
+ 
 * Number of attributes of function call GetStatusValue(2,5)
   at line -> 23 did not match the number of parameters of the function 
+ 
 * data type of attributes of function call GetStatusValue(2,5)
   at line -> 23 did not match the data type of parameters of the function 
-* data type of attributes of function call GetStatusValue("faild")
+ 
+* data type of attributes of function call GetStatusValue("failed")
   at line -> 24 did not match the data type of parameters of the function 
+ 
 * more than three parameters -> 4 parameters in function at line -> 27
-* Null pointer exception :student may = NULL at line -> 38
-* Hiding/burying exceptions at line -> 46
+ 
+* Unreachable code at line -> 39
+ 
+* Unreachable code at line -> 40
+ 
+* Null pointer exception :student may = NULL at line -> 46
+ 
+* Hiding/burying exceptions at line -> 54
+ 
