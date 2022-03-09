@@ -339,9 +339,46 @@ def CheckIfSameParametersAndArrguments(function):
 # # 6. no more than three parameters for the methods :
 # ***
 # 
-# #### Description
+# #### this function will check if the function which is passes to static analyzer
+# have a function or not to applay TestNumOfParam function on it 
 # ***
 # 
+
+# In[21]:
+
+
+def funIsFound(function):    
+    for line in function:
+        if ("def" in line):
+            return True   
+    return False
+
+
+# TestNumOfParam function will receive the "function"
+# pass on line by line in the stackCode to check if i find word "def" --> it mean there is a function ,then store start function in each function and the index of it
+# pass on line by line in startFun (which i storing the start function) ,then cheack if the "," found to count the number of parameters in function , if the count is more than two--> it mean there is more than three parameter in the function --> and this is my goal :)
+# finally it will write the bug on report file if it is found and its line .
+
+# In[22]:
+
+
+def TestNumOfParam(function):
+    startFun = []
+    startIndexOfFunction = []
+    for line in stackCode:
+        if ("def" in line):
+            startFun.append(line)      
+            startIndexOfFunction.append(stackCode.index(line))  
+    flag=1
+    for line in startFun:
+        if "," in line:
+            count=line.count(",")
+            if count>=3:
+                flag=0
+                break;
+    if(flag==0):
+        reportFile.write("* more than three parameters -> " + str((count+1))  + " parameters in function at line -> "+str(startIndexOfFunction[startFun.index(line)]+1) +"\n")         
+
 
 # # 7. Unreachable code :
 # ***
@@ -354,7 +391,7 @@ def CheckIfSameParametersAndArrguments(function):
 
 # #### Create reporte file to save the bygs :
 
-# In[21]:
+# In[23]:
 
 
 reportFile= open("Report.txt","w+")
@@ -362,7 +399,7 @@ reportFile= open("Report.txt","w+")
 
 # ### this StaticAnalyzerTool function will receive one function and check each line on it to see if it has any sentence that may cause any bug from the check list and if true it will call the tester functuin for this bug to print the details on text file .
 
-# In[22]:
+# In[24]:
 
 
 def StaticAnalyzerTool(function):
@@ -379,7 +416,6 @@ def StaticAnalyzerTool(function):
     if(CheckIfThereFunctionCall(function)):
         CheckIfSameParametersAndArrguments(function)
     
-    #parameters:
     #Unreachable code:
     
 
@@ -387,19 +423,20 @@ def StaticAnalyzerTool(function):
 # #### through on each function which is stored inside the functionaList , pass it to the Static Analyzer Fun to test it
 # ***
 
-# In[23]:
+# In[25]:
 
 
 functionNumber = 1
 for function in functionsList:   
     StaticAnalyzerTool(function)
     functionNumber+=1
-    
+if(funIsFound(function)==True):
+    TestNumOfParam(function)     
 #Hiding/burying exceptions
 TestHidingExcption()    
 
 
-# In[24]:
+# In[26]:
 
 
 reportFile.close()
