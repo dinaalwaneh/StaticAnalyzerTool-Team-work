@@ -28,10 +28,18 @@ class program:
         return 1
     
     
-    def unReachable(num:int):
-        if num > 4:
-            if num > 3:
-                return 1
+    def unReachable(status:int):
+        if status  == 0:
+            return "faild";
+                
+        elif status == 0:
+            return 0   # This line is unreachable
+                   
+        return "Pass"
+                
+        print("Exit")  # This line is unreachable
+        return "Pass"  # This line is unreachable
+          
             
             
     def Print(student):
