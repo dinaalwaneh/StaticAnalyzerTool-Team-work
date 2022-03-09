@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 * divide by zero error -> divisor may = 0 at line -> 8
  
 * Number of attributes of function call GetStatusValue(2,5)
@@ -19,3 +20,31 @@
  
 * Hiding/burying exceptions at line -> 54
  
+=======
+* devide by zero error ->divisor;= 0 at line -> 6
+* Number of attributes of function call GetStatusValue(2,5)
+ at line -> 20 did not match the number of parameters of the function 
+* data type of attributes of function call GetStatusValue(2,5)
+ at line -> 20 did not match the data type of parameters of the function 
+* data type of attributes of function call GetStatusValue("faild")
+ at line -> 21 did not match the data type of parameters of the function 
+* Null pointer exception :student may = NULL at line -> 36
+* more than three parameters -> 4 parameters in function at line -> 25
+*Magic numbers exist ->         if status == -1 :
+ at line -> 11
+*Magic numbers exist ->         elif status == 1:
+ at line -> 13
+*Magic numbers exist ->         elif status == 0:
+ at line -> 15
+*Magic numbers exist ->         GetStatusValue(2,5)
+ at line -> 21
+*Magic numbers exist ->         return 1
+ at line -> 26
+*Magic numbers exist ->         if num > 4:
+ at line -> 30
+*Magic numbers exist ->             if num > 3:
+ at line -> 31
+*Magic numbers exist ->                 return 1
+ at line -> 32
+* Hiding/burying exceptions at line -> 44
+>>>>>>> Stashed changes
