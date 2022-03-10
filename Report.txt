@@ -4,10 +4,6 @@
  
 * Magic Number 1 exist ->  at line -> 13
  
-* Magic Number 1 exist ->  at line -> 13
- 
-* Magic Number 0 exist ->  at line -> 15
- 
 * Magic Number 0 exist ->  at line -> 15
  
 * Magic Number 2 exist ->  at line -> 21
