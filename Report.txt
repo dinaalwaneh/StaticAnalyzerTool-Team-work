@@ -1,27 +1,45 @@
-
-* devide by zero error ->divisor;= 0 at line -> 6
+* divide by zero error -> divisor may = 0 at line -> 6
+ 
+* Magic Number 1 exist ->  at line -> 11
+ 
+* Magic Number 1 exist ->  at line -> 13
+ 
+* Magic Number 1 exist ->  at line -> 13
+ 
+* Magic Number 0 exist ->  at line -> 15
+ 
+* Magic Number 0 exist ->  at line -> 15
+ 
+* Magic Number 2 exist ->  at line -> 21
+ 
+* Magic Number 5 exist ->  at line -> 21
+ 
 * Number of attributes of function call GetStatusValue(2,5)
- at line -> 20 did not match the number of parameters of the function 
+  at line -> 21 did not match the number of parameters of the function 
+ 
 * data type of attributes of function call GetStatusValue(2,5)
- at line -> 20 did not match the data type of parameters of the function 
-* data type of attributes of function call GetStatusValue("faild")
- at line -> 21 did not match the data type of parameters of the function 
-* Null pointer exception :student may = NULL at line -> 36
+  at line -> 21 did not match the data type of parameters of the function 
+ 
+* data type of attributes of function call GetStatusValue("fail")
+  at line -> 22 did not match the data type of parameters of the function 
+ 
+* Magic Number 1 exist ->  at line -> 26
+ 
 * more than three parameters -> 4 parameters in function at line -> 25
-*Magic numbers exist ->         if status == -1 :
- at line -> 11
-*Magic numbers exist ->         elif status == 1:
- at line -> 13
-*Magic numbers exist ->         elif status == 0:
- at line -> 15
-*Magic numbers exist ->         GetStatusValue(2,5)
- at line -> 21
-*Magic numbers exist ->         return 1
- at line -> 26
-*Magic numbers exist ->         if num > 4:
- at line -> 30
-*Magic numbers exist ->             if num > 3:
- at line -> 31
-*Magic numbers exist ->                 return 1
- at line -> 32
-* Hiding/burying exceptions at line -> 44
+ 
+* Magic Number 0 exist ->  at line -> 30
+ 
+* Magic Number 0 exist ->  at line -> 33
+ 
+* Magic Number 0 exist ->  at line -> 34
+ 
+* Unreachable code at line -> 38
+ 
+* Unreachable code at line -> 39
+ 
+* Unreachable code at line -> 34  return 0
+ 
+* Null pointer exception :student may = NULL at line -> 43
+ 
+* Hiding/burying exceptions at line -> 52
+ 
