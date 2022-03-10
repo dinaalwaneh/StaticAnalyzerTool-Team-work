@@ -8,11 +8,11 @@ class program:
 
 
     def GetStatusValue(status:int):
-        if status == -1 :
+        if status == -1:
             print("fail")
-        elif status == 1:
+        elif status >= 1:
             print("success")      
-        elif status == 0:
+        elif status <= 0:
             print("invalid")
             
             
@@ -27,18 +27,17 @@ class program:
     
     
     def unReachable(status:int):
-        if status  == 0:
-            return "fail"
+        if status == 0:
+            return "fail";
                 
         elif status == 0:
-            return 0   # This line is unreachable
+            return 0   
                    
         return "Pass"
                 
-        print("Exit")  # This line is unreachable
-        return "Pass"  # This line is unreachable
-          
-            
+        print("Exit")   
+        return "Pass"   
+           
             
     def Print(student):
         print("Student", student.name)
@@ -50,6 +49,6 @@ class program:
         except NameError:
             print("The 'try ' is finished")  
         except One:
-              
+        
         finally:
              print("The 'try ' is finished")                
